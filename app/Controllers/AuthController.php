@@ -110,8 +110,10 @@ class AuthController extends BaseController
             'name' => '',
             'surname' => '',
             'email' => '',
+            'phoneNumber' => '',
+            'username' => '',
             'isLoggedIn' => FALSE,
-            'type' => '',
+            'role' => '',
         ];
         session()->set($ses_data);
         echo 'Successfully Logout';

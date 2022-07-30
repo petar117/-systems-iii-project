@@ -69,13 +69,27 @@
 <!-- SCRIPTS -->
 
 <script>
-    function toggleMenu() {
-        var menuItems = document.getElementsByClassName('menu-item');
-        for (var i = 0; i < menuItems.length; i++) {
-            var menuItem = menuItems[i];
-            menuItem.classList.toggle("hidden");
-        }
-    }
+    $(function() {
+
+        $('#logout').on('click', function(e) {
+            e.preventDefault();
+            console.log("click")
+            $.ajax({
+                type: 'post',
+                url: '/userAuth/logout',
+                dataType: "html",
+                success: function(response) {
+                    alert(response);
+                    window.location = "/login"
+                },
+                error: function(result) {
+                    $('body').html("err");
+                },
+            });
+
+        });
+
+    });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
