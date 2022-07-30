@@ -1,0 +1,33 @@
+.float{
+    text-decoration: none;
+    position:fixed;
+    width:150px;
+    height:60px;
+    bottom:40px;
+    right:40px;
+    background-color:#0C9;
+    color:#FFF;
+    border-radius:50px;
+    text-align:center;
+    overflow:hidden;
+    box-shadow: 2px 2px 3px #999;
+    max-width:60px;
+    -webkit-transition: max-width 0.3s;
+    transition: max-width 0.3s linear;
+}
+
+.float:hover {
+    max-width: 300px;
+}
+
+.my-float{
+    margin-top:22px;
+}
+
+.text {
+    color: white;
+    white-space: nowrap;
+    padding-right: 15px;
+}
+
+
