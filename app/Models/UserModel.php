@@ -12,5 +12,6 @@ class UserModel extends Model{
         'password',
         'phoneNumber',
         'username',
+        'role',
     ];
 }

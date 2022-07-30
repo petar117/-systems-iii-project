@@ -45,6 +45,7 @@ class AuthController extends BaseController
                 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                 'phoneNumber' => $this->request->getVar('phoneNumber'),
                 'username' => $this->request->getVar('username'),
+                'role' => 'user',
             ];
             $userModel->save($data);
             return "ok";
@@ -57,36 +58,48 @@ class AuthController extends BaseController
 
     public function login()
     {
-        $session = session();
-        $userModel = new UserModel();
+        $rules = [
+            'password' => 'required',
+            'username' => 'required',
+        ];
 
-        $username = $this->request->getVar('username');
-        $password = $this->request->getVar('password');
+        if ($this->validate($rules)) {
 
-        $data = $userModel->where('email', $username)->first();
+            $session = session();
+            $userModel = new UserModel();
 
-        if ($data) {
-            $pass = $data['password'];
-            $authenticatePassword = password_verify($password, $pass);
-            if ($authenticatePassword) {
-                $ses_data = [
-                    'id' => $data['id'],
-                    'username' => $data['username'],
-                    'firstName' => $data['firstName'],
-                    'lastName' => $data['lastName'],
-                    'email' => $data['email'],
-                    'isLoggedIn' => TRUE,
-                    'role' => 'u',
-                ];
-                $session->set($ses_data);
-                return "ok";
+            $username = $this->request->getVar('username');
+            $password = $this->request->getVar('password');
+
+            $data = $userModel->where('username', $username)->first();
+
+            if ($data) {
+                $pass = $data['password'];
+                $authenticatePassword = password_verify($password, $pass);
+                if ($authenticatePassword) {
+                    $ses_data = [
+                        'id' => $data['id'],
+                        'username' => $data['username'],
+                        'firstName' => $data['firstName'],
+                        'lastName' => $data['lastName'],
+                        'email' => $data['email'],
+                        'phoneNumber' => $data['phoneNumber'],
+                        'role' => $data['role'],
+                        'isLoggedIn' => TRUE,
+                    ];
+                    $session->set($ses_data);
+                    return "ok";
+                } else {
+                    $session->setFlashdata('msg', 'Password is incorrect.');
+                    return "Password is incorrect.";
+                }
             } else {
-                $session->setFlashdata('msg', 'Password is incorrect.');
-                return "Password is incorrect.";
+                $session->setFlashdata('msg', 'Username is incorrect.');
+                return "Username is incorrect.";
             }
         } else {
-            $session->setFlashdata('msg', 'Username is incorrect.');
-            return "Username is incorrect.";
+            $data['validation'] = $this->validator;
+            return $data['validation']->listErrors();
         }
     }
 
