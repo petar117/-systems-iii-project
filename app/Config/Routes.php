@@ -43,6 +43,7 @@ $routes->get('/profile', 'Features::profile');
 $routes->match(['get', 'post'], 'userAuth/register', 'AuthController::register');
 $routes->match(['get', 'post'], 'userAuth/login', 'AuthController::login');
 $routes->match(['get', 'post'], 'userAuth/logout', 'AuthController::logout');
+$routes->get('/shop','Features::index');
 $routes->get('/login', 'AuthController::loginPage');
 $routes->get('/register', 'AuthController::registerPage');
 $routes->get('(:any)', 'Pages::view/$1');

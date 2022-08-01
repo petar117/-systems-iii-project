@@ -6,6 +6,20 @@ use App\Models\ItemModel;
 
 class Features extends BaseController
 {
+    public function index()
+    {
+        $itemModel = new ItemModel();
+        $items = $itemModel->findAll();
+        $data = [
+            'items' => $items
+        ];
+
+        $data['title'] = 'Shop';
+        echo view('templates/header', $data);
+        echo view('features/shop', $data);
+        echo view('templates/footer');
+
+    }
 
     public function profile()
     {

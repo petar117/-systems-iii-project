@@ -40,7 +40,7 @@
                 success: function (response) {
                     if (response === "ok") {
                         alert("Login Successful!");
-                        window.location = "/afterLogin"
+                        window.location = "/profile"
                     } else {
                         document.getElementById("greski").hidden = false;
                         $('#greski').html(response);

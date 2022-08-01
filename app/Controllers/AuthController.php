@@ -116,6 +116,6 @@ class AuthController extends BaseController
             'role' => '',
         ];
         session()->set($ses_data);
-        echo 'Successfully Logout';
+        return redirect()->to('/login');
     }
 }
