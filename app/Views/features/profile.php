@@ -100,14 +100,18 @@
                             <?php foreach ($items as $item) { ?>
                                 <div class="row">
                                     <div class="col-sm-5 my-auto">
-                                        <img src="/uploads/<?php echo $item['imgLocation'] ?>"
-                                             class="rounded img-fluid" style="width: 150px;">
+                                        <a href="/item/<?php echo $item['id']?>">
+                                            <img src="/uploads/<?php echo $item['imgLocation'] ?>"
+                                                 class="rounded img-fluid" style="width: 150px;">
+                                        </a>
                                     </div>
                                     <div class="col-sm-6">
-                                        <h5 class="my-3"><?php echo $item['itemName'] ?></h5>
-                                        <p class="text-muted mb-0">
-                                            $<?php echo $item['price'] ?>
-                                        </p>
+                                        <a href="/item/<?php echo $item['id']?>">
+                                            <h5 class="my-3"><?php echo $item['itemName'] ?></h5>
+                                            <p class="text-muted mb-0">
+                                                $<?php echo $item['price'] ?>
+                                            </p>
+                                        </a>
                                     </div>
                                     <div class="col-sm-1 my-auto">
                                         <a><i class="fa-solid fa-pen-to-square"></i></a>
@@ -129,6 +133,33 @@
                 <div class="card mb-4 mb-md-0">
                     <div class="card-body">
                         <h5 class="text-center">My Orders</h5>
+                        <hr>
+                        <?php if (!empty($orders)): ?>
+                            <?php foreach ($orders as $order) { ?>
+                                <div class="row">
+                                    <div class="col-sm-5 my-auto">
+                                        <img src="/uploads/<?php echo $order['imgLocation'] ?>"
+                                             class="rounded img-fluid" style="width: 150px;">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h5 class="my-3"><?php echo $order['itemName'] ?></h5>
+                                        <p class="text-muted mb-0">
+                                            $<?php echo $order['price'] ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-1 my-auto">
+                                        <a><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a class="delete" id="order_<?php echo $order['id'] ?>"><i
+                                                    class="fa-solid fa-trash"></i></a>
+                                    </div>
+                                </div>
+                                <hr>
+                            <?php } ?>
+                        <?php else: ?>
+                            <div class="alert alert-primary" role="alert">
+                                You have no orders!
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

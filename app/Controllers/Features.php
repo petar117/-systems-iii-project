@@ -21,6 +21,20 @@ class Features extends BaseController
         echo view('templates/footer');
     }
 
+    public function item($id)
+    {
+        $itemModel = new ItemModel();
+        $item = $itemModel->where('id', $id)->first();
+        $data = [
+            'item' => $item
+        ];
+
+        $data['title'] = $item['itemName'];
+        echo view('templates/header', $data);
+        echo view('features/item', $data);
+        echo view('templates/footer');
+    }
+
     /**
      * @throws \ReflectionException
      */
