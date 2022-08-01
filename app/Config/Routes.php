@@ -36,10 +36,10 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Pages::index');
-$routes->get('/item/(:any)','Features::item/$1');
-$routes->match(['get', 'post'], 'features/deleteItem', 'Features::deleteItem');
-$routes->match(['get', 'post'], 'features/addItem', 'Features::addItem');
-$routes->get('/profile', 'Features::profile');
+$routes->get('/item/(:any)','Features::item/$1',['filter' => 'auth']);
+$routes->match(['get', 'post'], 'features/deleteItem', 'Features::deleteItem',['filter' => 'auth']);
+$routes->match(['get', 'post'], 'features/addItem', 'Features::addItem',['filter' => 'auth']);
+$routes->get('/profile', 'Features::profile',['filter' => 'auth']);
 $routes->match(['get', 'post'], 'userAuth/register', 'AuthController::register');
 $routes->match(['get', 'post'], 'userAuth/login', 'AuthController::login');
 $routes->match(['get', 'post'], 'userAuth/logout', 'AuthController::logout');
