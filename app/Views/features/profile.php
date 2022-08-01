@@ -10,16 +10,7 @@
                         <h5 class="my-3"><?php echo session()->get('username') ?></h5>
                     </div>
                 </div>
-
-                <div class="card mb-4 mb-lg-0">
-                    <div class="card-body p-0">
-                        <h5 class="text-center">Favourites</h5>
-                        <div class="list-group list-group-flush">
-                        </div>
-                    </div>
-                </div>
             </div>
-
             <div class="col-lg-8">
                 <div class="card mb-4">
                     <div class="card-body">
@@ -68,20 +59,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card mb-4 mb-md-0">
-                            <div class="card-body">
-                                <h5 class="text-center">My Items</h5>
-                            </div>
-                        </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4 mb-md-0">
+                    <div class="card-body">
+                        <h5 class="text-center">Favourites</h5>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card mb-4 mb-md-0">
-                            <div class="card-body">
-                                <h5 class="text-center">My Orders</h5>
-                            </div>
-                        </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 mb-md-0">
+                    <div class="card-body">
+                        <h5 class="text-center">My Items</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 mb-md-0">
+                    <div class="card-body">
+                        <h5 class="text-center">My Orders</h5>
                     </div>
                 </div>
             </div>
@@ -96,15 +94,38 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add a new item</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Post</button>
+                    <div class="alert alert-danger" id="greski" hidden>
+                    </div>
+                    <form enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="itemName">Item Name</label>
+                            <input type="text" class="form-control" name="itemName" id="itemName"
+                                   placeholder="Item Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Item Description</label>
+                            <input type="text" class="form-control" name="description" id="description"
+                                   placeholder="Item Description" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Item Price</label>
+                            <input type="text" class="form-control" name="price" id="price" placeholder="Item Price"
+                                   required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Upload item image</label>
+                            <input class="form-control" type="file" name="file" accept="image/*" required>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -112,5 +133,33 @@
 </section>
 
 <script>
+    $(function () {
+
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: 'post',
+                url: '/features/addItem',
+                data: new FormData(this),
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response === "ok") {
+                        alert("Upload Successful!");
+                        location.reload()
+                    } else {
+                        document.getElementById("greski").hidden = false;
+                        $('#greski').html(response);
+                    }
+                },
+                error: function (result) {
+                    $('body').html("err");
+                },
+            });
+
+        });
+
+    });
 </script>
 
