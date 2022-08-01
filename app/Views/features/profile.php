@@ -66,6 +66,28 @@
                 <div class="card mb-4 mb-md-0">
                     <div class="card-body">
                         <h5 class="text-center">Favourites</h5>
+                        <hr>
+                        <?php if (!empty($favourites)): ?>
+                            <?php foreach ($favourites as $favourite) { ?>
+                                <div class="row">
+                                    <div class="col-sm-5 my-auto">
+                                        <img src="/uploads/<?php echo $favourite['imgLocation'] ?>"
+                                             class="rounded img-fluid" style="width: 150px;">
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <h5 class="my-3"><?php echo $favourite['itemName'] ?></h5>
+                                        <p class="text-muted mb-0">
+                                            $<?php echo $favourite['price'] ?>
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+                            <?php } ?>
+                        <?php else: ?>
+                            <div class="alert alert-primary" role="alert">
+                                You have no favourite items!
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -73,6 +95,33 @@
                 <div class="card mb-4 mb-md-0">
                     <div class="card-body">
                         <h5 class="text-center">My Items</h5>
+                        <hr>
+                        <?php if (!empty($items)): ?>
+                            <?php foreach ($items as $item) { ?>
+                                <div class="row">
+                                    <div class="col-sm-5 my-auto">
+                                        <img src="/uploads/<?php echo $item['imgLocation'] ?>"
+                                             class="rounded img-fluid" style="width: 150px;">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h5 class="my-3"><?php echo $item['itemName'] ?></h5>
+                                        <p class="text-muted mb-0">
+                                            $<?php echo $item['price'] ?>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-1 my-auto">
+                                        <a><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a class="delete" id="item_<?php echo $item['id'] ?>"><i
+                                                    class="fa-solid fa-trash"></i></a>
+                                    </div>
+                                </div>
+                                <hr>
+                            <?php } ?>
+                        <?php else: ?>
+                            <div class="alert alert-primary" role="alert">
+                                You have no items currently listed!
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -161,5 +210,34 @@
         });
 
     });
+
+
+    $('.delete').click(function () {
+
+        if (confirm("Are you sure you want to delete this item?") === true) {
+
+            const id = $(this).attr('id')
+            const splitID = id.split('_');
+
+            const item = splitID[1];
+            $.ajax({
+                type: 'post',
+                url: '/features/deleteItem',
+                data: {id: item},
+                success: function (response) {
+                    if (response === "ok") {
+                        alert("Item deleted!");
+                        location.reload()
+                    } else {
+                        alert("Error!");
+                    }
+                },
+                error: function (result) {
+                    $('body').html("err");
+                },
+            });
+        }
+    });
+
 </script>
 

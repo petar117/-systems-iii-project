@@ -9,6 +9,12 @@ class Features extends BaseController
 
     public function profile()
     {
+        $itemModel = new ItemModel();
+        $items = $itemModel->where('userID', session()->get('id'))->findAll();
+        $data = [
+            'items' => $items
+        ];
+
         $data['title'] = "Profile Page";
         echo view('templates/header', $data);
         echo view('features/profile', $data);
@@ -60,5 +66,19 @@ class Features extends BaseController
         } else {
             return "Invalid File Type";
         }
+    }
+
+    public function deleteItem()
+    {
+        $itemModel = new ItemModel();
+
+        $id = $this->request->getVar('id');
+
+        $name = $itemModel->where("id", $id)->first()['imgLocation'];
+
+        unlink('uploads/' . $name);
+
+        $itemModel->where('id', $id)->delete();
+        return "ok";
     }
 }
