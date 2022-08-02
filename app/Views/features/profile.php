@@ -284,6 +284,7 @@
             const id = $(this).attr('id')
             const splitID = id.split('_');
             const item = splitID[1];
+
             $.ajax({
                 type: 'post',
                 url: '/features/removeFavourite',

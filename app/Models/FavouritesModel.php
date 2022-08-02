@@ -13,7 +13,8 @@ class FavouritesModel extends Model{
     /**
      * @throws \Exception
      */
-    public function getFavourites($userID){
+    public function getFavourites($userID): array
+    {
 
         $query = $this->db->table('favourites f')
             ->select('f.id,f.itemID,i.itemName,i.price,i.imgLocation')->join('item i', 'i.id = f.itemID')
@@ -21,5 +22,17 @@ class FavouritesModel extends Model{
             ->get();
 
         return $query->getResultArray();
+    }
+
+    public function check($userID, $itemID)
+    {
+
+        $query = 'SELECT * FROM favourites WHERE userID = ' . $userID . ' AND itemID = ' . $itemID;
+        $result = $this->db->query($query)->getNumRows();
+        if ($result > 0) {
+            return "true";
+        } else {
+            return "false";
+        }
     }
 }

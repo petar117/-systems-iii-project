@@ -156,4 +156,12 @@ class Features extends BaseController
 
         echo $response;
     }
+
+    public function isInFavourites()
+    {
+        $favouritesModel = new FavouritesModel();
+        $itemID = $this->request->getVar('itemID');
+        $userID = session()->get('id');
+        return $favouritesModel->check($userID, $itemID);
+    }
 }

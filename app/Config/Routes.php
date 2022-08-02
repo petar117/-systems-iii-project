@@ -36,7 +36,8 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Pages::index');
-$routes->match(['get','post'],'features/shop/search','Features::searchItem');
+$routes->match(['get','post'],'features/isInFavourites','Features::isInFavourites',['filter' => 'auth']);
+$routes->match(['get','post'],'features/shop/search','Features::searchItem',['filter' => 'auth']);
 $routes->match(['get', 'post'], 'features/removeFavourite', 'Features::removeFavourite',['filter' => 'auth']);
 $routes->match(['get', 'post'], 'features/addFavourite', 'Features::addFavourite',['filter' => 'auth']);
 $routes->get('/item/(:any)','Features::item/$1',['filter' => 'auth']);

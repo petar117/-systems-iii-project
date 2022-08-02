@@ -2,7 +2,8 @@
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="/uploads/<?php echo $item['imgLocation']?>" /></div>
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0"
+                                       src="/uploads/<?php echo $item['imgLocation'] ?>"/></div>
             <div class="col-md-6">
                 <h1 class="display-5 fw-bolder"><?php echo $item['itemName'] ?></h1>
                 <div class="fs-5 mb-5">
@@ -29,7 +30,7 @@
             <div class="col mb-5">
                 <div class="card h-100">
                     <!-- Product image-->
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
                     <!-- Product details-->
                     <div class="card-body p-4">
                         <div class="text-center">
@@ -48,9 +49,10 @@
             <div class="col mb-5">
                 <div class="card h-100">
                     <!-- Sale badge-->
-                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale
+                    </div>
                     <!-- Product image-->
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
                     <!-- Product details-->
                     <div class="card-body p-4">
                         <div class="text-center">
@@ -78,9 +80,10 @@
             <div class="col mb-5">
                 <div class="card h-100">
                     <!-- Sale badge-->
-                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale
+                    </div>
                     <!-- Product image-->
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
                     <!-- Product details-->
                     <div class="card-body p-4">
                         <div class="text-center">
@@ -100,7 +103,7 @@
             <div class="col mb-5">
                 <div class="card h-100">
                     <!-- Product image-->
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
                     <!-- Product details-->
                     <div class="card-body p-4">
                         <div class="text-center">
@@ -132,15 +135,31 @@
         $('.like').click(function () {
             if (confirm("Add item to favourites?") === true) {
                 const id = $(this).attr('id');
+
                 $.ajax({
-                    url: '/features/addFavourite',
-                    type: 'POST',
-                    data: {
-                        itemID: id
+                    type: 'post',
+                    url: '/features/isInFavourites',
+                    data: {itemID: id},
+                    success: function (response) {
+                        if (response === "true") {
+                            alert("Item already in Favourites!");
+                            location.reload()
+                        } else {
+                            $.ajax({
+                                url: '/features/addFavourite',
+                                type: 'POST',
+                                data: {
+                                    itemID: id
+                                },
+                                success: function (data) {
+                                    alert("Item added to favourites!");
+                                }
+                            });
+                        }
                     },
-                    success: function (data) {
-                        alert("Item added to favourites!");
-                    }
+                    error: function (result) {
+                        $('body').html("err");
+                    },
                 });
             }
         });
