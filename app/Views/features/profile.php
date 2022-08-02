@@ -298,7 +298,7 @@
                 },
                 error: function (result) {
                     $('body').html("err");
-                },y
+                },
             });
         }
     });
