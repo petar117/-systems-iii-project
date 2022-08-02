@@ -16,8 +16,8 @@ class FavouritesModel extends Model{
     public function getFavourites($userID){
 
         $query = $this->db->table('favourites f')
-            ->select('*')->join('item', 'item.id = favourites.itemID')
-            ->where('favourites.userID', $userID)
+            ->select('f.id,f.itemID,i.itemName,i.price,i.imgLocation')->join('item i', 'i.id = f.itemID')
+            ->where('f.userID', $userID)
             ->get();
 
         return $query->getResultArray();
