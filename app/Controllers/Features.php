@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\FavouritesModel;
 use App\Models\ItemModel;
 
 class Features extends BaseController
@@ -21,12 +22,26 @@ class Features extends BaseController
 
     }
 
+    public function display($data)
+    {
+        $data['title'] = 'Shop';
+        echo view('templates/header', $data);
+        echo view('features/shop', ['data' => $data]);
+        echo view('templates/footer', $data);
+    }
+
     public function profile()
     {
         $itemModel = new ItemModel();
+        $favouritesModel = new FavouritesModel();
+
         $items = $itemModel->where('userID', session()->get('id'))->findAll();
+
+        $favourites = $favouritesModel->getFavourites(session()->get('id'));
+
         $data = [
-            'items' => $items
+            'items' => $items,
+            'favourites' => $favourites
         ];
 
         $data['title'] = "Profile Page";
@@ -108,5 +123,37 @@ class Features extends BaseController
 
         $itemModel->where('id', $id)->delete();
         return "ok";
+    }
+
+    public function addFavourite()
+    {
+        $favouritesModel = new FavouritesModel();
+        $data = [
+            'userID' => session()->get('id'),
+            'itemID' => $this->request->getVar('itemID')
+        ];
+        $favouritesModel->save($data);
+        return "ok";
+    }
+
+    public function removeFavourite()
+    {
+        $favouritesModel = new FavouritesModel();
+        $id = $this->request->getVar('id');
+        $favouritesModel->where('id', $id)->delete();
+        return "ok";
+    }
+
+    public function searchItem()
+    {
+        $itemModel = new ItemModel();
+        $keyword = $this->request->getVar('text');
+        $items = $itemModel->search($keyword);
+
+        $data['items'] = $items;
+
+        $response = $this->display($data);
+
+        echo $response;
     }
 }

@@ -12,4 +12,11 @@ class ItemModel extends Model{
         'imgLocation',
         'userID',
     ];
+
+    public function search($keyword)
+    {
+        $query = "select * from item where itemName like '%" . $keyword . "%'";
+
+        return $this->db->query($query)->getResultArray();
+    }
 }

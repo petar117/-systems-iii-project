@@ -71,14 +71,22 @@
                             <?php foreach ($favourites as $favourite) { ?>
                                 <div class="row">
                                     <div class="col-sm-5 my-auto">
-                                        <img src="/uploads/<?php echo $favourite['imgLocation'] ?>"
-                                             class="rounded img-fluid" style="width: 150px;">
+                                        <a href="/item/<?php echo $favourite['itemID'] ?>">
+                                            <img src="/uploads/<?php echo $favourite['imgLocation'] ?>"
+                                                 class="rounded img-fluid" style="width: 150px;">
+                                        </a>
                                     </div>
-                                    <div class="col-sm-7">
-                                        <h5 class="my-3"><?php echo $favourite['itemName'] ?></h5>
-                                        <p class="text-muted mb-0">
-                                            $<?php echo $favourite['price'] ?>
-                                        </p>
+                                    <div class="col-sm-5">
+                                        <a href="/item/<?php echo $favourite['itemID'] ?>">
+                                            <h5 class="my-3"><?php echo $favourite['itemName'] ?></h5>
+                                            <p class="text-muted mb-0">
+                                                $<?php echo $favourite['price'] ?>
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-1 my-auto">
+                                        <a class="unfavourite" id="item_<?php echo $favourite['id'] ?>"><i
+                                                    class="fa-solid fa-heart-crack"></i></a>
                                     </div>
                                 </div>
                                 <hr>
@@ -100,13 +108,13 @@
                             <?php foreach ($items as $item) { ?>
                                 <div class="row">
                                     <div class="col-sm-5 my-auto">
-                                        <a href="/item/<?php echo $item['id']?>">
+                                        <a href="/item/<?php echo $item['id'] ?>">
                                             <img src="/uploads/<?php echo $item['imgLocation'] ?>"
                                                  class="rounded img-fluid" style="width: 150px;">
                                         </a>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <a href="/item/<?php echo $item['id']?>">
+                                    <div class="col-sm-5">
+                                        <a href="/item/<?php echo $item['id'] ?>">
                                             <h5 class="my-3"><?php echo $item['itemName'] ?></h5>
                                             <p class="text-muted mb-0">
                                                 $<?php echo $item['price'] ?>
@@ -270,5 +278,29 @@
         }
     });
 
+    $('.unfavourite').click(function () {
+
+        if (confirm("Are you sure you want to unfavourite this item?") === true) {
+            const id = $(this).attr('id')
+            const splitID = id.split('_');
+            const item = splitID[1];
+            $.ajax({
+                type: 'post',
+                url: '/features/removeFavourite',
+                data: {id: item},
+                success: function (response) {
+                    if (response === "ok") {
+                        alert("Item unfavourited!");
+                        location.reload()
+                    } else {
+                        alert("Error!");
+                    }
+                },
+                error: function (result) {
+                    $('body').html("err");
+                },
+            });
+        }
+    });
 </script>
 
