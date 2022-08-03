@@ -9,6 +9,18 @@
                 <div class="fs-5 mb-5">
                     <span>Price: $<?php echo $item['price'] ?></span>
                 </div>
+                <div class="post">
+                    <div class="post-action">
+                        <!-- Rating Bar -->
+                        <input id="item_<?php echo $item['id'] ?>" value='<?php echo $userRating?>'
+                               class="kv-ltr-theme-svg-star ratingbar" data-min="0" data-max="5"
+                               data-step="1">
+                        <!-- Average Rating -->
+                        <div>Average Rating: <span
+                                    id='averageRating'><?php echo $averageRating?></span>
+                        </div>
+                    </div>
+                </div>
                 <p class="lead"><?php echo $item['description'] ?></p>
                 <div class="d-flex">
                     <button class="btn btn-outline-dark flex-shrink-0" type="button">
@@ -162,6 +174,35 @@
                     },
                 });
             }
+        });
+    });
+
+    $(document).ready(function () {
+
+        // Initialize
+        $('.ratingbar').rating({
+            showCaption: false,
+            showClear: false,
+            size: 'sm'
+        });
+
+        // Rating change
+        $('.ratingbar').on('rating:change', function (event, value, caption) {
+            const id = this.id;
+            const splitID = id.split('_');
+            const itemID = splitID[1];
+
+            $.ajax({
+                url: '/features/rateItem',
+                type: 'post',
+                data: {
+                    itemID: itemID,
+                    rating: value,
+                },
+                success: function (response) {
+                    $('#averageRating').text(response);
+                }
+            });
         });
     });
 </script>

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\FavouritesModel;
 use App\Models\ItemModel;
+use App\Models\RatingModel;
 
 class Features extends BaseController
 {
@@ -57,6 +58,25 @@ class Features extends BaseController
         $data = [
             'item' => $item
         ];
+
+        $ratingModel = new RatingModel();
+
+        $userRating = $ratingModel->where('userID', session()->get('id'))->where('itemID', $id)->first();
+
+        if ($userRating <> NULL) {
+            $data['userRating'] = $userRating['stars'];  // If user has already rated the item, display their rating
+        } else {
+            $data['userRating'] = "0";
+        }
+
+        $averageRating = $ratingModel->where('itemID', $id)->selectAvg('stars')->first();
+
+        if ($averageRating['stars'] <> NULL) {
+            $data['averageRating'] = $averageRating['stars'];  // If there are ratings, display the average rating
+        } else {
+            $data['averageRating'] = 0;
+        }
+
 
         $data['title'] = $item['itemName'];
         echo view('templates/header', $data);
@@ -163,5 +183,19 @@ class Features extends BaseController
         $itemID = $this->request->getVar('itemID');
         $userID = session()->get('id');
         return $favouritesModel->check($userID, $itemID);
+    }
+
+    public function updateRating()
+    {
+
+        $ratingModel = new RatingModel();
+
+        $userID = session()->get('id');
+        $itemID = $this->request->getVar('itemID');
+        $rating = $this->request->getVar('rating');
+
+        $averageRating = $ratingModel->userRating($userID, $itemID, $rating);
+
+        echo $averageRating;
     }
 }
