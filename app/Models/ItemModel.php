@@ -11,11 +11,19 @@ class ItemModel extends Model{
         'price',
         'imgLocation',
         'userID',
+        'category',
     ];
 
     public function search($keyword)
     {
         $query = "select * from item where itemName like '%" . $keyword . "%'";
+
+        return $this->db->query($query)->getResultArray();
+    }
+
+    public function getCategories()
+    {
+        $query = "select DISTINCT category from item";
 
         return $this->db->query($query)->getResultArray();
     }

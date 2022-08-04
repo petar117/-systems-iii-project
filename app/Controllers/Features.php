@@ -12,8 +12,17 @@ class Features extends BaseController
     {
         $itemModel = new ItemModel();
         $items = $itemModel->findAll();
+
+        $categories = $itemModel->getCategories();
+
+        // capitalise each first letter of each category
+        foreach ($categories as &$category) {
+            $category['category'] = ucfirst($category['category']);
+        }
+
         $data = [
-            'items' => $items
+            'items' => $items,
+            'categories' => $categories,
         ];
 
         $data['title'] = 'Shop';
@@ -25,10 +34,7 @@ class Features extends BaseController
 
     public function display($data)
     {
-        $data['title'] = 'Shop';
-        echo view('templates/header', $data);
-        echo view('features/shop', ['data' => $data]);
-        echo view('templates/footer', $data);
+        echo view('features/display', ['data' => $data]);
     }
 
     public function profile()
@@ -102,6 +108,7 @@ class Features extends BaseController
                 'itemName' => 'required|min_length[3]|max_length[50]',
                 'description' => 'required|min_length[3]|max_length[500]',
                 'price' => 'required|numeric|min_length[1]|max_length[11]',
+                'category' => 'required|min_length[3]|max_length[50]',
             ];
 
             if ($this->validate($rules)) {
@@ -113,6 +120,7 @@ class Features extends BaseController
                     'itemName' => $this->request->getVar('itemName'),
                     'description' => $this->request->getVar('description'),
                     'price' => $this->request->getVar('price'),
+                    'category' => $this->request->getVar('category'),
                     'imgLocation' => $img->getName(),
                     'userID' => session()->get('id')
                 ];
@@ -169,6 +177,18 @@ class Features extends BaseController
         $itemModel = new ItemModel();
         $keyword = $this->request->getVar('text');
         $items = $itemModel->search($keyword);
+
+        $data['items'] = $items;
+
+        $response = $this->display($data);
+
+        echo $response;
+    }
+
+    public function filterItems(){
+        $itemModel = new ItemModel();
+        $category = strtolower($this->request->getVar('filter'));
+        $items = $itemModel->where('category', $category)->findAll();
 
         $data['items'] = $items;
 

@@ -200,6 +200,11 @@
                                    placeholder="Item Description" required>
                         </div>
                         <div class="form-group">
+                            <label for="category">Category</label>
+                            <input type="text" class="form-control" name="category" id="category"
+                                   placeholder="Category" required>
+                        </div>
+                        <div class="form-group">
                             <label for="price">Item Price</label>
                             <input type="text" class="form-control" name="price" id="price" placeholder="Item Price"
                                    required>

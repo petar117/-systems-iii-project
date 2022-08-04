@@ -14,7 +14,8 @@
                             </div>
                             <!--end of col-->
                             <div class="col">
-                                <input class="form-control form-control-lg form-control-borderless" id="textarea" type="search" placeholder="Search topics or keywords">
+                                <input class="form-control form-control-lg form-control-borderless" id="textarea"
+                                       type="search" placeholder="Search topics or keywords">
                             </div>
                             <!--end of col-->
                             <div class="col-auto">
@@ -29,8 +30,31 @@
         </div>
     </div>
 </header>
+<div class="container-fluid text-center mt-5">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" id="applyFilter" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            Choose category
+        </button>
+        <ul class="dropdown-menu">
+            <?php if (!empty($categories)): ?>
+                <?php foreach ($categories as $category) { ?>
+                    <li>
+                        <button class="dropdown-item filter"
+                                id="filter_<?php echo $category['category'] ?>"><?php echo $category['category'] ?></button>
+                    </li>
+                <?php } ?>
+            <?php else: ?>
+                <li>
+                    <button class="dropdown-item">No categories in the database!</button>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </div>
+</div>
+
 <!-- Section-->
-<section class="py-5">
+<section class="py-5" id="main">
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             <?php if (!empty($items)): ?>
@@ -69,9 +93,9 @@
 
 <script>
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-        $('#searchButton').click(function(event, value, caption) {
+        $('#searchButton').click(function (event, value, caption) {
             event.preventDefault();
             const text = $("#textarea").val();
             if (text == '') {
@@ -84,17 +108,44 @@
                     data: {
                         text: text,
                     },
-                    success: function(response) {
-                        $('body').html(response);
+                    success: function (response) {
+                        $("#main").html(response);
                     },
-                    error: function(result) {
+                    error: function (result) {
                         $('body').html("err");
                     },
-                    beforeSend: function(d) {
-                        $('body').html("Searching...");
+                    beforeSend: function (d) {
+                        $('#main').html("Searching...");
                     }
                 });
             }
         })
     });
+
+    $(document).ready(function () {
+        $('.filter').click(function (event, value, caption) {
+            event.preventDefault();
+            const category = $(this).attr('id').split('_')[1];
+
+            $.ajax({
+                url: '/features/shop/filter',
+                type: 'post',
+                dataType: "html",
+                data: {
+                    filter: category,
+                },
+                success: function (response) {
+                    $("#main").html(response);
+                    },
+                error: function (result) {
+                    $('body').html("err");
+                },
+                beforeSend: function (d) {
+                    $('#main').html("Searching...");
+                }
+            });
+
+        })
+    });
+
 </script>
