@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\CommentModel;
 use App\Models\FavouritesModel;
 use App\Models\ItemModel;
 use App\Models\RatingModel;
@@ -83,6 +84,13 @@ class Features extends BaseController
             $data['averageRating'] = 0;
         }
 
+        $similarItems = $itemModel->similarItems($item['id'],$item['category']);
+        $data['similarItems'] = $similarItems;
+
+        $commentModel = new CommentModel();
+
+        $comments = $commentModel->getComments($item['id']);
+        $data['comments'] = $comments;
 
         $data['title'] = $item['itemName'];
         echo view('templates/header', $data);
@@ -217,5 +225,17 @@ class Features extends BaseController
         $averageRating = $ratingModel->userRating($userID, $itemID, $rating);
 
         echo $averageRating;
+    }
+
+    public function postComment()
+    {
+        $commentModel = new CommentModel();
+        $data = [
+            'userID' => session()->get('id'),
+            'itemID' => $this->request->getVar('itemID'),
+            'text' => $this->request->getVar('text')
+        ];
+        $commentModel->save($data);
+        return "ok";
     }
 }

@@ -27,4 +27,12 @@ class ItemModel extends Model{
 
         return $this->db->query($query)->getResultArray();
     }
+
+    public function similarItems($id, $category)
+    {
+        $query = "select * from item where category = '" . $category . "'" . "and id <> " . $id;
+
+        return $this->db->query($query)->getResultArray();
+
+    }
 }

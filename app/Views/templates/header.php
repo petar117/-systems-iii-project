@@ -54,7 +54,7 @@
                                   </li>';
                     } else {
                         echo '<li class="nav-item">
-                                <a class="nav-link" href="#"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
+                                <a class="nav-link" data-bs-toggle="modal" data-bs-target="#cartModal" href="#"><i class="fa-solid fa-cart-shopping"></i> Cart</a>
                                   </li>';
                         echo '<li class="nav-item">
                                 <a class="nav-link" href="/profile"><i class="fa-solid fa-user"></i> Profile</a>
