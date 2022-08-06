@@ -12,12 +12,11 @@ class CommentModel extends Model
         'userID',
         'itemID',
         'text',
-        'date'
     ];
 
     public function getComments($id)
     {
-        $query = 'SELECT c.id, c.itemID, c.text, c.date, u.firstName, u.lastName FROM comment c INNER JOIN user u ON c.userID = u.id INNER JOIN item i ON c.itemID = i.id WHERE c.itemID = ' . $id;
+        $query = 'SELECT c.id, c.itemID, c.text, u.firstName, u.lastName FROM comment c INNER JOIN user u ON c.userID = u.id INNER JOIN item i ON c.itemID = i.id WHERE c.itemID = ' . $id;
 
         return $this->db->query($query)->getResultArray();
     }

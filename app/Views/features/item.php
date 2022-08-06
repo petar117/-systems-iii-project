@@ -46,7 +46,6 @@
                             <div class="d-flex flex-row user-info">
                                 <div class="d-flex flex-column justify-content-start ml-2"><span
                                             class="d-block font-weight-bold name"><?php echo $comment['firstName'] . " " . $comment['lastName'] ?></span>
-                                    <span class="date text-black-50"><?php echo $comment['date'] ?></span>
                                 </div>
                             </div>
                             <div class="mt-2">
