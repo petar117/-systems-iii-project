@@ -239,6 +239,7 @@
                 processData: false,
                 success: function (response) {
                     if (response === "ok") {
+                        console.log(response)
                         alert("Upload Successful!");
                         location.reload()
                     } else {
@@ -247,6 +248,7 @@
                     }
                 },
                 error: function (result) {
+                    console.log(result)
                     $('body').html("err");
                 },
             });
